@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualización 3D de Archivo</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; background-color: #f0f2f5; }
+        .container { background: white; padding: 2em; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 900px; margin: auto; }
+        form { display: flex; gap: 1em; align-items: center; margin-bottom: 2em; flex-wrap: wrap; }
+        .form-group { display: flex; flex-direction: column; }
+        label { margin-bottom: 0.5em; color: #555; }
+        select, input { padding: 0.5em; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 0.7em 1.5em; border: none; background: #007bff; color: white; border-radius: 5px; cursor: pointer; }
+        .error { color: red; font-weight: bold; }
+        img { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Visualizacion 3D de Datos de Archivo</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="fileName">Selecciona un Archivo:</label>
+                <select name="fileName" id="fileName" required>
+                    <option value="">-- Elige un archivo --</option>
+                    {% for file in available_files %}
+                        <option value="{{ file }}" {% if file == selected_file %}selected{% endif %}>{{ file }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="colX">Columna Eje X:</label>
+                <input type="number" name="colX" id="colX" value="{{ selected_cols.x | default:0 }}" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="colY">Columna Eje Y:</label>
+                <input type="number" name="colY" id="colY" value="{{ selected_cols.y | default:1 }}" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="colZ">Columna Eje Z:</label>
+                <input type="number" name="colZ" id="colZ" value="{{ selected_cols.z | default:2 }}" min="0" required>
+            </div>
+            <button type="submit">Generar Grafica</button>
+        </form>
+
+        {% if error %}
+            <p class="error">Error: {{ error }}</p>
+        {% endif %}
+
+        {% if graph %}
+            <h2>Grafica de Dispersión 3D</h2>
+            <img src="data:image/png;base64,{{ graph }}" alt="Gráfica de Visualización 3D">
+        {% endif %}
+
+        <a href="{% url 'index' %}" style="margin-top: 2em; display: inline-block;">← Volver al Menú Principal</a>
+    </div>
+</body>
+</html>

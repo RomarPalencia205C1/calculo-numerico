@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Numerica Avanzada</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            padding: 2em 0;
+        }
+        .menu-container {
+            text-align: center;
+            background-color: white;
+            padding: 2em 4em;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #1c1e21;
+            margin-bottom: 1em;
+        }
+        h2.section-title {
+            font-size: 1.2em;
+            color: #333;
+            margin-top: 1.5em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5em;
+            margin-bottom: 1em;
+        }
+        .menu-button {
+            display: block;
+            background-color: #007bff;
+            color: white;
+            padding: 15px 30px;
+            margin: 0.5em 0;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            text-decoration: none;
+            width: 100%;
+            box-sizing: border-box;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center !important;
+        }
+        .menu-button:hover {
+            background-color: #0069d9;
+        }
+        .projection-button {
+            background-color: #1877f2;
+        }
+        .projection-button:hover {
+            background-color: #166fe5;
+        }
+        p {
+            color: #6c757d;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #eee;
+            margin: 2em 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1>Calculadora Numerica Avanzada</h1>
+
+        <h2 class="section-title">Analisis Estadistico de Errores</h2>
+        
+        {% if available_files %}
+            <p>Selecciona un archivo para analizar:</p>
+            {% for file_name in available_files %}
+                <a href="{% url 'statisticalAnalysis' fileName=file_name %}" class="menu-button">{{ file_name }}</a>
+            {% endfor %}
+        {% else %}
+            <p>No se encontraron archivos en la carpeta /data para analizar.</p>
+        {% endif %}
+        
+        <hr>
+
+        <h2 class="section-title">Visualizacion 3D</h2>
+        <a href="{% url 'dataFile3D' %}" class="menu-button projection-button">Visualización 3D de Archivo</a>
+    </div>
+</body>
+</html>

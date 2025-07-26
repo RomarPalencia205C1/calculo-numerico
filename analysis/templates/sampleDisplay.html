@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Muestra de Datos</title>
+    </head>
+<body>
+    <div>
+        <h1>Muestra de Datos del Archivo Grande</h1>
+        <p>Se ha tomado una muestra aleatoria de <strong>{{ sample_size }}</strong> registros.</p>
+        <h2>Datos de la Muestra:</h2>
+        <pre>{{ sample_data|join:"\n" }}</pre>
+        <a href="{% url 'index' %}">← Volver al Menu Principal</a>
+    </div>
+</body>
+</html>
