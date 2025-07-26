@@ -15,6 +15,15 @@ class FileGenerator:
                 print(f"Directorio creado: {self.outputDirectory}")
             except OSError as error:
                 raise OSError(f"Error creando directorio: {str(error)}")
+
+        log_directory = 'log'
+
+        if not os.path.exists(log_directory):
+            try:
+                os.makedirs(log_directory)
+                print(f"Directorio creado: {log_directory}")
+            except OSError as error:
+                raise OSError(f"Error creando directorio de log: {str(error)}")
     
     def generateOutputFile(self, baseName: str, resultsList: LinkedList) -> str:
         if not baseName or not resultsList or resultsList.getListLength() == 0:

@@ -1,34 +1,46 @@
 import os
 import random
+import traceback
 from datetime import datetime
-from estructuras.listaEnlazada import LinkedList
-from algebra.matrix import Matrix
 
 class ErrorLogger:
-    _log_dir = "log"
-    _log_file = os.path.join(_log_dir, "errores.log")
+    _logDir = "log"
+    _logFile = os.path.join(_logDir, "errores.log")
     
     @staticmethod
-    def _ensure_log_directory_exists():
-        if not os.path.exists(ErrorLogger._log_dir):
-            os.makedirs(ErrorLogger._log_dir)
+    def _ensureLogDirectoryExists():
+        if not os.path.exists(ErrorLogger._logDir):
+            os.makedirs(ErrorLogger._logDir)
 
     @staticmethod
-    def log(error_type: str, details: str):
-        ErrorLogger._ensure_log_directory_exists()
+    def log(errorType: str, details: str):
+        try:
+            if not os.path.exists(ErrorLogger._logDir):
+                os.makedirs(ErrorLogger._logDir)
+        except OSError as e:
+            print(f"CRITICO: No se pudo crear el directorio de log: {str(e)}")
+            return
         
         timestamp = datetime.now().strftime("%Y%m%d")
         serial = random.randint(100, 999)
-        log_entry = f"{error_type}_{timestamp}_{serial}: {details}\n"
+        
+        stackTrace = traceback.extract_stack()
+        if stackTrace:
+            frame = stackTrace[-2] 
+            location = f"{os.path.basename(frame.filename)}:{frame.lineno}"
+        else:
+            location = "desconocido:0"
+        
+        logEntry = f"{errorType}_{timestamp}_{serial}: Error [{details}] | Ubicacion: {location}\n"
         
         try:
-            with open(ErrorLogger._log_file, "a", encoding="utf-8") as f:
-                f.write(log_entry)
+            with open(ErrorLogger._logFile, "a", encoding="utf-8") as file:
+                file.write(logEntry)
         except Exception as e:
-            print(f"CRITICAL: No se pudo escribir en log: {str(e)}")
-            print(f"Log entry: {log_entry}")
+            print(f"CRITICO: No se pudo escribir en el log: {str(e)}")
+            print(f"Entrada de log: {logEntry}")
     
     @staticmethod
-    def log_matrix_operation(matrix: Matrix, operation: str, error: Exception):
+    def logMatrixOperation(matrix: 'Matrix', operation: str, error: Exception):
         details = f"Operacion: {operation}, Dimensiones: {matrix.rows}x{matrix.cols}, Error: {str(error)}"
         ErrorLogger.log("MatrixOperationError", details)

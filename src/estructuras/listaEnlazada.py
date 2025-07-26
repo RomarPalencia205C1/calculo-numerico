@@ -102,12 +102,12 @@ class LinkedList:
         for _ in range(index):
             current = current.nextNode
         current.elementData = value
-
+    
     def toPythonList(self):
         result = []
         current = self.headNode
         while current:
-            result.append(current.elementData)
+            result.append(str(current.elementData))
             current = current.nextNode
         return result
     

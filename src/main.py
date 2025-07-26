@@ -4,26 +4,25 @@ from errores.errorLogger import ErrorLogger
 
 def main():
     try:
-        dataDirectoryPath = os.path.join(os.getcwd(), 'data')
-        outputDirectoryPath = os.path.join(os.getcwd(), 'output')
-        logsDirectoryPath = os.path.join(os.getcwd(), 'logs')
+        baseDir = os.getcwd()
+        dataDirectoryPath = os.path.join(baseDir, 'data')
+        outputDirectoryPath = os.path.join(baseDir, 'output')
+        matrixDirectoryPath = os.path.join(baseDir, 'matrices')
         
-        mainLogic = LogicaPrincipal(dataDirectoryPath, outputDirectoryPath, logsDirectoryPath)
-        
-        mainLogic.setupProcessingEnvironment()
-        
-        filesToProcess = mainLogic.getProcessableFiles()
-        
-        if filesToProcess.getListLength() == 0:
-            print("No se encontraron archivos validos para procesar en la carpeta 'data'")
-            return
-        
-        mainLogic.processFileCollection(filesToProcess)
-        
+        mainLogic = LogicaPrincipal(
+            dataDirectoryPath, 
+            outputDirectoryPath, 
+            matrixDirectoryPath
+        )
+
+        mainLogic.run()
+
     except Exception as criticalError:
-        ErrorLogger.log("CriticalSystemError", f"Error critico de ejecucion: {str(criticalError)}")
-        print(f"Error critico de ejecucion: {str(criticalError)}")
+        errorMessage = f"Error critico de ejecucion: {str(criticalError)}"
+        ErrorLogger.log("CriticalSystemError", errorMessage)
+        print(errorMessage)
+        import traceback
+        traceback.print_exc()
 
 if __name__ == "__main__":
     main()
-
